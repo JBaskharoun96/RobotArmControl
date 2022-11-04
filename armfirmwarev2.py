@@ -11,16 +11,16 @@ def coordsUpdate():
     dataFile = open('data.txt', 'w')
 
     dataFile.write("%s %s\n" % (joystick.xz_coordinates[0], joystick.xz_coordinates[1]))
-    dataFile.write("extendclaw=%d\n" % random.randint(0,1))
-    dataFile.write("gripclaw=%d\n" % random.randint(0,1))
+    dataFile.write("extendclaw=%s\n" % (1 if not joystick.ExtendDown else 0) )
+    dataFile.write("gripclaw=%s\n" % (1 if not joystick.GrabDown else 0) )
 
     dataFile.close()
 
     print("Sending data.txt:")
     print(joystick.xz_coordinates)
 
-    os.system('scp "%s" "%s:%s"' % ("data.txt", "volcane@192.168.0.17", "~/Code/RobotArm/data.txt"))
-    
+    os.system('scp "%s" "%s:%s"' % ("data.txt", "volcane@192.168.0.2", "~/Code/RobotArm/data.txt"))
+
     print("Data sent")
 
 
@@ -38,7 +38,7 @@ def main():
 
     scheduler = sched.scheduler(time.time, time.sleep)
 
-    periodicEvent(scheduler, 0.6, coordsUpdate)
+    periodicEvent(scheduler, 0.3, coordsUpdate)
 
     schedulerThread = threading.Thread(target=scheduler.run)
     schedulerThread.start()
