@@ -106,7 +106,17 @@ class ArmDriver:
             GPIO.output(self.turnLeftPin, False)
             GPIO.output(self.turnRightPin, False)
 
-        
+        if self.extendClawInput:
+            GPIO.output(self.extendClawPin, True)
+        else:
+            GPIO.output(self.extendClawPin, False)
+
+        if self.gripClawInput:
+            GPIO.output(self.gripClawPin, True)
+        else:
+            GPIO.output(self.gripClawPin, False)
+
+
     def convertJoystickToDirections(self):
         """Converts the xy coordinates from the joystick into the appropriate set of GPIO output flags"""
         # Using a deadzone of +- 8 to make it easier to hit cardinal direction outputs instead of diagonals
@@ -118,12 +128,6 @@ class ArmDriver:
         if    self.xyCoords[1] > 8:  self.pushMainInput = True ;  self.pullMainInput = False
         elif  self.xyCoords[1] < -8:  self.pushMainInput = False;  self.pullMainInput = True
         else:                        self.pushMainInput = False;  self.pullMainInput = False
-
-        if self.extendClawInput:  self.extendClaw = True
-        else:                     self.extendClaw = False
-
-        if self.gripClawInput:  self.gripClaw = True
-        else:                   self.gripClaw = False
 
 
     def checkLimit(self):
@@ -172,7 +176,7 @@ def main():
     scheduler = sched.scheduler(time.time, time.sleep)
 
     # Establish program tick loop and start scheduler running in separate thread
-    armControl.programTicker(scheduler, 0.4)
+    armControl.programTicker(scheduler, 0.2)
     schedulerThread = threading.Thread(target=scheduler.run)
     schedulerThread.start()
 

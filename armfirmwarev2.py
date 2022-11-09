@@ -1,6 +1,5 @@
 import GUIPanel
 import os
-import random
 import sched
 import threading
 import time
