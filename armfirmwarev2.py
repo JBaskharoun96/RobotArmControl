@@ -18,7 +18,7 @@ def coordsUpdate():
     print("Sending data.txt:")
     print(joystick.xz_coordinates)
 
-    os.system('scp "%s" "%s:%s"' % ("data.txt", "volcane@192.168.0.2", "~/Code/RobotArm/data.txt"))
+    os.system('scp "%s" "%s:%s"' % ("data.txt", "volcane@192.168.0.13", "~/Code/RobotArm/data.txt"))
 
     print("Data sent")
 
@@ -37,7 +37,7 @@ def main():
 
     scheduler = sched.scheduler(time.time, time.sleep)
 
-    periodicEvent(scheduler, 0.3, coordsUpdate)
+    periodicEvent(scheduler, 0.003, coordsUpdate)
 
     schedulerThread = threading.Thread(target=scheduler.run)
     schedulerThread.start()
@@ -45,5 +45,7 @@ def main():
     joystick.run()
 
 
-joystick = GUIPanel.JoyStick()
-main()
+if __name__ == "__main__":
+
+    joystick = GUIPanel.JoyStick()
+    main()
